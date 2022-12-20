@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebApplication221220.Models;
 
 namespace WebApplication221220.Controllers
 {
@@ -10,21 +11,25 @@ namespace WebApplication221220.Controllers
     {
         public ActionResult Index()
         {
+            Diary diary = new Diary("1", DateTime.Now, "第一篇日記", "第一篇日記的內容");
+
+            return View(diary);
+        }
+        public ActionResult keep()
+        {
+            
             return View();
         }
 
-        public ActionResult About()
+        [HttpPost]
+        public ActionResult Index(Diary model)
         {
-            ViewBag.Message = "Your application description page.";
+            string id = model.id;
+            string title = model.title;
+            string content = model.content;
 
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            Diary diary = new Diary(id, DateTime.Now, title, content);
+            return View(diary);
         }
     }
 }
