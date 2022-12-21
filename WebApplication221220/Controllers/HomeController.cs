@@ -11,9 +11,10 @@ namespace WebApplication221220.Controllers
     {
         public ActionResult Index()
         {
-            Diary diary = new Diary("1", DateTime.Now, "第一篇日記", "第一篇日記的內容");
+            //Diary diary = new Diary("1", DateTime.Now, "第一篇日記", "第一篇日記的內容");
 
-            return View(diary);
+            //return View(diary);
+            return View();
         }
         public ActionResult keep()
         {
@@ -28,8 +29,11 @@ namespace WebApplication221220.Controllers
             string title = model.title;
             string content = model.content;
 
-            Diary diary = new Diary(id, DateTime.Now, title, content);
-            return View(diary);
+            //Diary diary = new Diary(id, DateTime.Now, title, content);
+
+           // return View(diary);
+            return View();
+
         }
     }
 }
