@@ -9,12 +9,19 @@ namespace WebApplication221220.Controllers
 {
     public class HomeController : Controller
     {
+        private MydbContext db = new MydbContext();
+
         public ActionResult Index()
         {
-            //Diary diary = new Diary("1", DateTime.Now, "第一篇日記", "第一篇日記的內容");
+            var result = db.Diarys.First();
 
-            //return View(diary);
-            return View();
+            Diary diary = new Diary();
+            diary.id = result.id;
+            diary.title = result.title;
+            diary.content = result.content;
+            diary.date = result.date;
+
+            return View(diary);
         }
         public ActionResult keep()
         {
@@ -25,14 +32,16 @@ namespace WebApplication221220.Controllers
         [HttpPost]
         public ActionResult Index(Diary model)
         {
-            string id = model.id;
-            string title = model.title;
-            string content = model.content;
+            Diary diary = new Diary();
+            diary.id = model.id;
+            diary.title = model.title;
+            diary.content = model.content;
+            diary.date = DateTime.Now;
 
-            //Diary diary = new Diary(id, DateTime.Now, title, content);
+            db.Diarys.Add(diary);
+            db.SaveChanges();
 
-           // return View(diary);
-            return View();
+            return View(diary);
 
         }
     }
