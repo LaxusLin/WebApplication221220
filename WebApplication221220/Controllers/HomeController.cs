@@ -15,8 +15,7 @@ namespace WebApplication221220.Controllers
 
         public ActionResult Index()
         {
-            var result = db.Diarys.ToList();
-
+            var result = db.Diarys.ToList().OrderBy(item => item.date);
             return View(result);
         }
         public ActionResult Keep()
@@ -58,6 +57,8 @@ namespace WebApplication221220.Controllers
         [HttpPost]
         public ActionResult Edit([Bind(Include = "id,date,title, content")] Diary diary)
         {
+            diary.date = DateTime.Now;
+
             if (ModelState.IsValid)
             {
                 db.Entry(diary).State = EntityState.Modified;
@@ -66,6 +67,23 @@ namespace WebApplication221220.Controllers
                 return RedirectToAction("Index", "Home", null);
             }
             return View(diary);
+        }
+
+        public ActionResult Delete(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Diary diary = db.Diarys.Find(id);
+            if (diary == null)
+            {
+                return HttpNotFound();
+            }
+            db.Diarys.Remove(diary);
+            db.SaveChanges();
+
+            return RedirectToAction("Index", "Home", null);
         }
     }
 }

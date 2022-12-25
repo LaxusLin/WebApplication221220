@@ -9,6 +9,7 @@ namespace WebApplication221220.Models
     public class Diary
     {
         [Key]
+        [Display(Name = "ID")]
         public string id { get; set; }
 
         [Required]
