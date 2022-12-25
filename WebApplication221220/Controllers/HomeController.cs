@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WebApplication221220.Models;
@@ -13,17 +15,11 @@ namespace WebApplication221220.Controllers
 
         public ActionResult Index()
         {
-            var result = db.Diarys.First();
+            var result = db.Diarys.ToList();
 
-            Diary diary = new Diary();
-            diary.id = result.id;
-            diary.title = result.title;
-            diary.content = result.content;
-            diary.date = result.date;
-
-            return View(diary);
+            return View(result);
         }
-        public ActionResult keep()
+        public ActionResult Keep()
         {
             
             return View();
@@ -41,8 +37,35 @@ namespace WebApplication221220.Controllers
             db.Diarys.Add(diary);
             db.SaveChanges();
 
-            return View(diary);
+            return RedirectToAction("Index", "Home");
+        }
 
+        public ActionResult Edit(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Diary diary = db.Diarys.Find(id);
+            if (diary == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(diary);
+        }
+
+        [HttpPost]
+        public ActionResult Edit([Bind(Include = "id,date,title, content")] Diary diary)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(diary).State = EntityState.Modified;
+                db.SaveChanges();
+
+                return RedirectToAction("Index", "Home", null);
+            }
+            return View(diary);
         }
     }
 }
